@@ -51,6 +51,8 @@ require "elmas/resources/goods_delivery"
 require "elmas/resources/goods_delivery_line"
 require "elmas/resources/division"
 require "elmas/resources/user"
+require "active_support"
+require "active_support/core_ext"
 
 module Elmas
   extend Config
