@@ -1,0 +1,74 @@
+require 'spec_helper'
+
+describe Elmas::PayablesListByAccount do
+  it "can initialize" do
+    payables_list_by_account = Elmas::PayablesListByAccount.new
+    expect(payables_list_by_account).to be_a(Elmas::PayablesListByAccount)
+  end
+
+  it "accepts attribute setter" do
+    payables_list_by_account = Elmas::PayablesListByAccount.new
+    payables_list_by_account.due_date = "78238"
+    expect(payables_list_by_account.due_date).to eq "78238"
+  end
+
+  it "returns value for getters" do
+    payables_list_by_account = Elmas::PayablesListByAccount.new({ "DueDate" => "345" })
+    expect(payables_list_by_account.due_date).to eq "345"
+  end
+
+  it "crashes and burns when getting an unset attribute" do
+    payables_list_by_account = Elmas::PayablesListByAccount.new({ this_does_not_exist: "Piet" })
+    expect(payables_list_by_account.try(:due_date)).to eq nil
+  end
+
+
+
+  let(:resource) { resource = Elmas::PayablesListByAccount.new(id: "12abcdef-1234-1234-1234-123456abcdef", due_date: "1223") }
+
+  context "Applying filters" do
+    it "should apply ID filter for find" do
+      expect(Elmas).to receive(:get).with("read/financial/PayablesListByAccount(guid'12abcdef-1234-1234-1234-123456abcdef')?")
+      resource.find
+    end
+
+    it "should apply no filters for find_all" do
+      expect(Elmas).to receive(:get).with("read/financial/PayablesListByAccount?")
+      resource.find_all
+    end
+
+    it "should apply given filters for find_by" do
+      expect(Elmas).to receive(:get).with("read/financial/PayablesListByAccount?$filter=DueDate eq '1223'&$filter=ID eq guid'12abcdef-1234-1234-1234-123456abcdef'")
+      resource.find_by(filters: [:due_date, :id])
+    end
+  end
+
+  context "Applying order" do
+    it "should apply the order_by and filters" do
+    expect(Elmas).to receive(:get).with("read/financial/PayablesListByAccount?$orderby=DueDate&$filter=DueDate eq '1223'&$filter=ID eq guid'12abcdef-1234-1234-1234-123456abcdef'")
+      resource.find_by(filters: [:due_date, :id], order_by: :due_date)
+    end
+
+    it "should only apply the order_by" do
+      expect(Elmas).to receive(:get).with("read/financial/PayablesListByAccount?$orderby=DueDate")
+      resource.find_all(order_by: :due_date)
+    end
+  end
+
+  context "Applying select" do
+    it "should apply one select" do
+    expect(Elmas).to receive(:get).with("read/financial/PayablesListByAccount?$select=DueDate")
+      resource.find_all(select: [:due_date])
+    end
+
+    it "should apply one select with find_by" do
+    expect(Elmas).to receive(:get).with("read/financial/PayablesListByAccount?$select=DueDate")
+      resource.find_by(select: [:due_date])
+    end
+
+    it "should apply one select" do
+    expect(Elmas).to receive(:get).with("read/financial/PayablesListByAccount?$select=DueDate,ID")
+      resource.find_all(select: [:due_date, :id])
+    end
+  end
+end

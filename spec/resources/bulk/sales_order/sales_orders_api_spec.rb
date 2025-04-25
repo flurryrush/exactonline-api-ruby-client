@@ -1,0 +1,83 @@
+require 'spec_helper'
+
+describe Elmas::BulkSalesOrderSalesOrder do
+  it "can initialize" do
+    bulk_sales_order_sales_order = Elmas::BulkSalesOrderSalesOrder.new
+    expect(bulk_sales_order_sales_order).to be_a(Elmas::BulkSalesOrderSalesOrder)
+  end
+
+  it "accepts attribute setter" do
+    bulk_sales_order_sales_order = Elmas::BulkSalesOrderSalesOrder.new
+    bulk_sales_order_sales_order.creator = "78238"
+    expect(bulk_sales_order_sales_order.creator).to eq "78238"
+  end
+
+  it "returns value for getters" do
+    bulk_sales_order_sales_order = Elmas::BulkSalesOrderSalesOrder.new({ "Creator" => "345" })
+    expect(bulk_sales_order_sales_order.creator).to eq "345"
+  end
+
+  it "crashes and burns when getting an unset attribute" do
+    bulk_sales_order_sales_order = Elmas::BulkSalesOrderSalesOrder.new({ this_does_not_exist: "Piet" })
+    expect(bulk_sales_order_sales_order.try(:creator)).to eq nil
+  end
+
+  it "is valid with mandatory attributes" do
+    bulk_sales_order_sales_order = Elmas::BulkSalesOrderSalesOrder.new(ordered_by: "OrderedBy", sales_order_lines: "SalesOrderLines")
+    expect(bulk_sales_order_sales_order.valid?).to eq(true)
+  end
+  
+  it "is not valid without mandatory attributes" do
+    bulk_sales_order_sales_order = Elmas::BulkSalesOrderSalesOrder.new
+    expect(bulk_sales_order_sales_order.valid?).to eq(false)
+  end
+
+
+  let(:resource) { resource = Elmas::BulkSalesOrderSalesOrder.new(id: "12abcdef-1234-1234-1234-123456abcdef", creator: "1223") }
+
+  context "Applying filters" do
+    it "should apply ID filter for find" do
+      expect(Elmas).to receive(:get).with("bulk/SalesOrder/SalesOrders(guid'12abcdef-1234-1234-1234-123456abcdef')?")
+      resource.find
+    end
+
+    it "should apply no filters for find_all" do
+      expect(Elmas).to receive(:get).with("bulk/SalesOrder/SalesOrders?")
+      resource.find_all
+    end
+
+    it "should apply given filters for find_by" do
+      expect(Elmas).to receive(:get).with("bulk/SalesOrder/SalesOrders?$filter=Creator eq '1223'&$filter=ID eq guid'12abcdef-1234-1234-1234-123456abcdef'")
+      resource.find_by(filters: [:creator, :id])
+    end
+  end
+
+  context "Applying order" do
+    it "should apply the order_by and filters" do
+    expect(Elmas).to receive(:get).with("bulk/SalesOrder/SalesOrders?$orderby=Creator&$filter=Creator eq '1223'&$filter=ID eq guid'12abcdef-1234-1234-1234-123456abcdef'")
+      resource.find_by(filters: [:creator, :id], order_by: :creator)
+    end
+
+    it "should only apply the order_by" do
+      expect(Elmas).to receive(:get).with("bulk/SalesOrder/SalesOrders?$orderby=Creator")
+      resource.find_all(order_by: :creator)
+    end
+  end
+
+  context "Applying select" do
+    it "should apply one select" do
+    expect(Elmas).to receive(:get).with("bulk/SalesOrder/SalesOrders?$select=Creator")
+      resource.find_all(select: [:creator])
+    end
+
+    it "should apply one select with find_by" do
+    expect(Elmas).to receive(:get).with("bulk/SalesOrder/SalesOrders?$select=Creator")
+      resource.find_by(select: [:creator])
+    end
+
+    it "should apply one select" do
+    expect(Elmas).to receive(:get).with("bulk/SalesOrder/SalesOrders?$select=Creator,ID")
+      resource.find_all(select: [:creator, :id])
+    end
+  end
+end
