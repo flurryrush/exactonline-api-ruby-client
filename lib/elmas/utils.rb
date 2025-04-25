@@ -2,6 +2,20 @@
 
 module Elmas
   module Utils
+
+    # /
+    #   (?<before>[A-Za-z]*?)          # lazy grab of letters before a token
+    #   (?:
+    #       (?<token>VatGl[A-Z])       # "VatGl" + next capital letter
+    #     | (?<token>Gl[A-Z])          # "Gl" + next capital letter
+    #     | (?<token>Vat)              # literal "Vat"
+    #     | (?<token>Id)               # "Id" suffix / token
+    #     | (?<token>Fc)               # "Fc" suffix / token
+    #   )
+    # /x.freeze
+
+    TOKEN_REGEX = /(?<before>[A-Za-z]*?)(?:(?<token>VatGl[A-Z])|(?<token>Gl[A-Z])|(?<token>Vat)|(?<token>Id)|(?<token>Fc))/x.freeze
+
     def self.demodulize(class_name_in_module)
       class_name_in_module.to_s.sub(/^.*::/, "")
     end
@@ -20,7 +34,22 @@ module Elmas
 
     def self.camelize(word, uppercase_first_letter = true)
       if uppercase_first_letter
-        word.to_s.gsub(%r{//(.?)/}) { "::#{$1.upcase}" }.gsub(/(^|_)(.)/) { $2.upcase }
+        # use active support camelize
+        # make sure *Vat*, *Gl*, *Id and *Fc are properly camelized
+        word = word.to_s.camelize
+        res = ""
+        pos = 0
+        while (m = TOKEN_REGEX.match(word, pos))
+          # push the 'before' group unless it's empty
+          res += m[:before] unless m[:before].empty?
+          # push the token itself
+          res += m[:token].upcase
+          # advance the cursor
+          pos = m.end(0)
+        end
+        # push any trailing letters after the last token
+        res += word[pos..] if pos < word.length
+        res
       else
         word[0] + Utils.camelize(word)[1..]
       end

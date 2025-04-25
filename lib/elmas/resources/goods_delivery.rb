@@ -1,18 +1,24 @@
 # frozen_string_literal: true
 
 module Elmas
+  # Endpoint
+  # GoodsDelivery
+  #
+  # Good to know
+  # Use this endpoint to :  Create new goods deliveries.
+  #   Read existing goods deliveries.
+  #   Update existing goods deliveries.
+  # Delivery lines support trade-in lines.
+  #  For more details, please refer description under properties GoodsDeliveryLines > QuantityDelivered Note: For creating a GoodsDeliveries, it is mandatory to supply one or more GoodsDeliveryLines and DeliveryDate.
+  # Business example API goods deliveryFor more information about the  functionality in Exact Online, see Goods delivery - New
+  #
+  # Scope
+  # Logistics wms
   class GoodsDelivery
     include Elmas::Resource
-    include Elmas::SharedSalesAttributes
 
-    # For some reason the Exact API for GoodsDelivery requires us to specify
-    # the fields we want returned.  This isn't required for other calls.  :/
-    # We get around this by specifying a wildcard on the $select param.
-    def find_all(options = {})
-      @order_by = options[:order_by]
-      @select = options[:select] ||= ["*"]
-      response = get(uri(%i[order select]))
-      response&.results
+    def valid_actions
+      %i[get post put]
     end
 
     def base_path
@@ -20,20 +26,20 @@ module Elmas
     end
 
     def mandatory_attributes
-      [:goods_delivery_lines]
+      %i[
+        delivery_date goods_delivery_lines
+      ]
     end
 
+    # https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=SalesOrderGoodsDeliveries
     def other_attributes
-      SHARED_SALES_ATTRIBUTES.inject(
-        %i[
-          delivery_account delivery_account_code delivery_account_name
-          delivery_address delivery_contact delivery_contact_person_full_name
-          delivery_date delivery_number
-          shipping_method shipping_method_code shipping_method_description
-          tracking_number warehouse warehouse_code warehouse_description
-        ],
-        :<<
-      )
+      %i[
+        entry_id created creator creator_full_name delivery_account delivery_account_code
+        delivery_account_name delivery_address delivery_contact delivery_contact_person_full_name
+        delivery_number description division document document_subject entry_number modified
+        modifier modifier_full_name remarks shipping_method shipping_method_code
+        shipping_method_description tracking_number warehouse warehouse_code warehouse_description
+      ]
     end
   end
 end

@@ -1,12 +1,15 @@
 # frozen_string_literal: true
 
 module Elmas
-  # We can use the AgingReceivablesList to change the status of SalesInvoices from
-  # Open to 'Verwerkt' while at the same time sending a PDF of the invoice to the
-  # end user by e-mail.
+  # Endpoint
+  # AgingReceivablesList
   #
-  # This endpoint only supports the POST method.
+  # Good to know
+  # Use this endpoint to get an overview of all your customers outstanding items amount that is group by their age group.
+  # You can view this information in the Ageing Analysis Report - A/R as well
   #
+  # Scope
+  # Financial receivables
   class AgingReceivablesList
     include Elmas::Resource
 
@@ -19,15 +22,18 @@ module Elmas
     end
 
     def mandatory_attributes
-      []
+      %i[
+        
+      ]
     end
 
-    # https//start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=SalesInvoiceAgingReceivablesLists
+    # https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=ReadFinancialAgingReceivablesList
     def other_attributes
       %i[
         account_id account_code account_name age_group1 age_group1_amount age_group1_description
-        age_group2 age_group2_amount age_group2_description age_group3 age_group3_amount age_group3_description
-        age_group4 age_group4_amount age_group4_description currency_code total_amount
+        age_group2 age_group2_amount age_group2_description age_group3 age_group3_amount
+        age_group3_description age_group4 age_group4_amount age_group4_description currency_code
+        total_amount
       ]
     end
   end
