@@ -74,7 +74,7 @@ describe Elmas::Request do
   end
 
   it "normalizes belongs to relationships" do
-    invoice_line = Elmas::SalesInvoiceLine.new(item: "1", invoice_ID: Elmas::SalesInvoice.new(journal: "1", id: "2"))
+    invoice_line = Elmas::SalesInvoiceLine.new(item: "1", invoice_id: Elmas::SalesInvoice.new(journal: "1", id: "2"))
     expect(invoice_line.sanitize["InvoiceID"]).to eq("2")
   end
 
