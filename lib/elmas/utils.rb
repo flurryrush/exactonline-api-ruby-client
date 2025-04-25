@@ -60,6 +60,7 @@ module Elmas
         key = key.gsub(/::/, "/")
         key = key.gsub(/([A-Z]+)([A-Z][a-z])/, '\1_\2')
         key = key.gsub(/([a-z\d])([A-Z])/, '\1_\2')
+        key = key.gsub(/([a-z])(\d{2,})/, '\1_\2')
         key = key.tr("-", "_")
         key = key.downcase
         return key.to_sym
