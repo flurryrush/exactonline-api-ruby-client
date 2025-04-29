@@ -29,10 +29,11 @@ module Elmas
 
     # Return URL for OAuth authorization
     def authorize_url(options = {})
-      options[:response_type] ||= "code"
       options[:redirect_uri] ||= redirect_uri
+      options[:response_type] ||= "code"
+      options[:force_login] ||= 0
       params = authorization_params.merge(options)
-      uri = URI("#{base_url}/api/oauth2/auth/")
+      uri = URI("#{base_url}/api/oauth2/auth")
       uri.query = URI.encode_www_form(params)
       uri.to_s
     end
@@ -44,28 +45,29 @@ module Elmas
         faraday.adapter Faraday.default_adapter
       end
       params = access_token_params(code)
-      conn.post do |req|
-        req.url "/api/oauth2/token"
-        req.body = params
-        req.headers["Accept"] = "application/json"
-      end
-    end
-
-    # Return an access token from authorization via refresh token
-    def get_refresh_token(refresh_token)
-      conn = Faraday.new(url: config[:base_url]) do |faraday|
-        faraday.request :url_encoded
-        faraday.adapter Faraday.default_adapter
-      end
-
-      params = refresh_access_token_params(refresh_token)
-
-      conn.post do |req|
+      res = conn.post do |req|
         req.url "/api/oauth2/token"
         req.body = params
         req.headers["Accept"] = "application/json"
         req.headers["Content-Type"] = "application/x-www-form-urlencoded"
       end
+      OauthResponse.new(res)
+    end
+
+    # Return an access token from authorization via refresh token
+    def get_refresh_token(refresh_token)
+      conn = Faraday.new(url: base_url) do |faraday|
+        faraday.request :url_encoded
+        faraday.adapter Faraday.default_adapter
+      end
+      params = refresh_access_token_params(refresh_token)
+      res = conn.post do |req|
+        req.url "/api/oauth2/token"
+        req.body = params
+        req.headers["Accept"] = "application/json"
+        req.headers["Content-Type"] = "application/x-www-form-urlencoded"
+      end
+      OauthResponse.new(res)
     end
 
     private
@@ -97,20 +99,16 @@ module Elmas
   end
 
   class OauthResponse < Response
-    def body
-      JSON.parse(@response.body)
-    end
-
     def access_token
-      body["access_token"]
-    end
-
-    def division
-      body["division"]
+      parsed.parsed_json["access_token"]
     end
 
     def refresh_token
-      body["refresh_token"]
+      parsed.parsed_json["refresh_token"]
+    end
+
+    def expires_in
+      parsed.parsed_json["expires_in"].to_i
     end
   end
 end

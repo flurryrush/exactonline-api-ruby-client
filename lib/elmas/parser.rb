@@ -30,7 +30,7 @@ module Elmas
     end
 
     def error_message
-      @error_message ||= (parsed_json["error"]["message"]["value"] if parsed_json["error"])
+      @error_message ||= ("#{parsed_json["error"]}: #{parsed_json["error_description"]}" if parsed_json["error"])
     end
 
     def first_result

@@ -14,7 +14,22 @@ describe Elmas::Request do
       config.base_url = base_url
       config.endpoint = endpoint
       config.division = division
+      config.access_token = "access_token"
     end
+  end
+
+  it "sets the authorization header" do
+    stub_request(:get, "#{url_with_endpoint_and_division}/resource").
+      with(
+        headers: {
+          "Accept": "application/json",
+          "Authorization": "Bearer access_token",
+          "Content-Type": "application/json",
+          "Prefer": "return=representation",
+        }
+      ).
+      to_return(status: 200, body: "", headers: {})
+    expect(Elmas.get("resource")).to be_a(Elmas::Response)
   end
 
   it "does a get request" do
@@ -32,7 +47,7 @@ describe Elmas::Request do
     expect(Elmas.get("resource", no_division: true)).to be_a(Elmas::Response)
   end
 
-  it "returns nill if id is not set and find is called" do
+  it "returns nil if id is not set and find is called" do
     resource = Elmas::Contact.new
     expect(resource.find).to eq(nil)
   end
