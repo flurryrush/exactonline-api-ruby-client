@@ -14,6 +14,22 @@ require File.expand_path("response", __dir__)
 
 module Elmas
   module OAuth
+    def token_path
+      "/api/oauth2/token"
+    end
+
+    def token_uri
+      "#{base_url}#{token_path}"
+    end
+
+    def auth_path
+      "/api/oauth2/auth"
+    end
+
+    def auth_uri
+      "#{base_url}#{auth_path}"
+    end
+
     def authorized?
       # Do a test call, return false if 401 or any error code
       response = Elmas.get("/Current/Me", no_division: true)
@@ -33,7 +49,7 @@ module Elmas
       options[:response_type] ||= "code"
       options[:force_login] ||= 0
       params = authorization_params.merge(options)
-      uri = URI("#{base_url}/api/oauth2/auth")
+      uri = URI(auth_uri)
       uri.query = URI.encode_www_form(params)
       uri.to_s
     end
@@ -46,7 +62,7 @@ module Elmas
       end
       params = access_token_params(code)
       res = conn.post do |req|
-        req.url "/api/oauth2/token"
+        req.url token_path
         req.body = params
         req.headers["Accept"] = "application/json"
         req.headers["Content-Type"] = "application/x-www-form-urlencoded"
@@ -62,7 +78,7 @@ module Elmas
       end
       params = refresh_access_token_params(refresh_token)
       res = conn.post do |req|
-        req.url "/api/oauth2/token"
+        req.url token_path
         req.body = params
         req.headers["Accept"] = "application/json"
         req.headers["Content-Type"] = "application/x-www-form-urlencoded"
