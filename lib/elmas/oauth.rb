@@ -45,6 +45,7 @@ module Elmas
 
     # Return URL for OAuth authorization
     def authorize_url(options = {})
+      options[:client_id] ||= client_id
       options[:redirect_uri] ||= redirect_uri
       options[:response_type] ||= "code"
       options[:force_login] ||= 0
