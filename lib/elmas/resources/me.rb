@@ -22,8 +22,12 @@ module Elmas
 
     def mandatory_attributes
       %i[
-        
+
       ]
+    end
+
+    def no_division?
+      true
     end
 
     # https://start.exactonline.nl/docs/HlpRestAPIResourcesDetails.aspx?name=SystemSystemMe

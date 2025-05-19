@@ -48,7 +48,11 @@ module Elmas
 
     # Normally use the url method (which applies the filters) but sometimes you only want to use the base path or other paths
     def get(uri = self.uri)
-      @response = Elmas.get(URI.decode_www_form_component(uri.to_s))
+      @response = if no_division?
+        Elmas.get(URI.decode_www_form_component(uri.to_s), { no_division: true })
+      else
+        Elmas.get(URI.decode_www_form_component(uri.to_s))
+      end
     end
 
     def valid?(validate: true)
