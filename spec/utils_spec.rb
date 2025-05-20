@@ -25,6 +25,18 @@ describe Elmas::Utils do
     expect(Elmas::Utils.collection_path("Exact::User")).to eq "users"
   end
 
+  it "camelizes special cases" do
+    expect(Elmas::Utils.camelize("vat_number")).to eq "VATNumber"
+    expect(Elmas::Utils.camelize("is_hr_division")).to eq "IsHRDivision"
+    expect(Elmas::Utils.camelize("ob_number")).to eq "OBNumber"
+    expect(Elmas::Utils.camelize("address_line1")).to eq "AddressLine1"
+    expect(Elmas::Utils.camelize("closing_balance_fc")).to eq "ClosingBalanceFC"
+    expect(Elmas::Utils.camelize("gl_account_purchase")).to eq "GLAccountPurchase"
+    expect(Elmas::Utils.camelize("bsn")).to eq "BSN"
+    expect(Elmas::Utils.camelize("quotation_id")).to eq "QuotationID"
+    expect(Elmas::Utils.camelize("class_01")).to eq "Class_01"
+  end
+
   let(:original_hash) do
     {
       "Module::Foo" => "bar",
