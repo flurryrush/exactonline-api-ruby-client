@@ -16,6 +16,7 @@ module Elmas
 
     TOKEN_REGEX = /(?<before>[A-Za-z]*?)(?:(?<token>VatGl[A-Z])|(?<token>Gl[A-Z])|(?<token>Vat)|(?<token>Id)|(?<token>Fc)|(?<token>Hr))/x.freeze
     SPECIAL_CASES = {
+      bic_code: "BICCode",
       brin: "BRIN",
       bsn: "BSN",
       class_01: "Class_01",
