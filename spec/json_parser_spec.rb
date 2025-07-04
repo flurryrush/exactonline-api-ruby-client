@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Elmas::Parser do
+describe Elmas::JsonParser do
   let(:sample_json) {
     {
       "d" => {
@@ -49,11 +49,11 @@ describe Elmas::Parser do
   }
 
   it "parses and returns all results" do
-    expect(Elmas::Parser.new(sample_json).results.length).to eq(2)
+    expect(Elmas::JsonParser.new(sample_json).results.length).to eq(2)
   end
 
   it "parses and returns the first result" do
-    expect(Elmas::Parser.new(sample_json).first_result["FullName"]).to eq("Marthyn Olthof")
-    expect(Elmas::Parser.new(sample_json).first_result["FullName"]).to_not eq("Karel Appel")
+    expect(Elmas::JsonParser.new(sample_json).first_result["FullName"]).to eq("Marthyn Olthof")
+    expect(Elmas::JsonParser.new(sample_json).first_result["FullName"]).to_not eq("Karel Appel")
   end
 end

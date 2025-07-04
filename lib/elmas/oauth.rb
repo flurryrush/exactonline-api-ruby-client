@@ -117,15 +117,15 @@ module Elmas
 
   class OauthResponse < Response
     def access_token
-      parsed.parsed_json["access_token"]
+      parsed.parsed_data["access_token"]
     end
 
     def refresh_token
-      parsed.parsed_json["refresh_token"]
+      parsed.parsed_data["refresh_token"]
     end
 
     def expires_in
-      parsed.parsed_json["expires_in"].to_i
+      parsed.parsed_data["expires_in"].to_i
     end
   end
 end

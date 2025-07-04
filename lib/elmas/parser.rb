@@ -1,17 +1,8 @@
 # frozen_string_literal: true
 
 module Elmas
-  class Parser
-    attr_accessor :parsed_json
-
-    def initialize(json)
-      @parsed_json = JSON.parse(json)
-    rescue JSON::ParserError => e
-      Elmas.error "There was an error parsing the response"
-      Elmas.error "#{e.class}: #{e.message}"
-      @parsed_json = ""
-      @error_message = ""
-    end
+  module Parser
+    attr_accessor :parsed_data
 
     def results
       result["results"] if result && result["results"]
@@ -22,7 +13,7 @@ module Elmas
     end
 
     def result
-      parsed_json["d"]
+      parsed_data["d"]
     end
 
     def next_page_url
@@ -30,7 +21,7 @@ module Elmas
     end
 
     def error_message
-      @error_message ||= ("#{parsed_json["error"]}: #{parsed_json["error_description"]}" if parsed_json["error"])
+      @error_message ||= ("#{parsed_data["error"]}: #{parsed_data["error_description"]}" if parsed_data["error"])
     end
 
     def first_result

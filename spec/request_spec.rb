@@ -48,7 +48,20 @@ describe Elmas::Request do
   end
 
   it "does a me request without division" do
-    stub_request(:get, "#{url_with_endpoint}/current/Me?$select=AccountingDivision")
+    stub_request(:get, "#{url_with_endpoint}/current/Me?$select=AccountingDivision").
+      to_return(status: 200, body: {
+        d: {
+          results: [
+            {
+              __metadata: {
+                uri: "https://start.exactonline.nl/api/v1/current/Me(guid'ce6dc6c1-358c-424a-b461-2204e9cc9c38')",
+                type: "Exact.Web.Api.Models.System.Me"
+              },
+              AccountingDivision: 4116781
+            }
+          ]
+        }
+      }.to_json)
     expect(Elmas::Me.new.find_by(select: ["AccountingDivision"])).to be_a(Elmas::ResultSet)
   end
 
@@ -60,7 +73,7 @@ describe Elmas::Request do
   it "does a get request with params" do
     random_id = rand(999).to_s
     stub_request(:get, "#{url_with_endpoint_and_division}/salesinvoice/SalesInvoices(guid'#{random_id}')?").
-       to_return(status: 200, body: { :d => { :__metadata => { 'type' => "Exact.Web.Api.Models.SalesInvoice" } } }.to_json)
+       to_return(status: 200, body: { d: { __metadata: { type: "Exact.Web.Api.Models.SalesInvoice" } } }.to_json)
     resource = Elmas::SalesInvoice.new(id: random_id)
     response = resource.find
     expect(response).to be_a(Elmas::SalesInvoice)

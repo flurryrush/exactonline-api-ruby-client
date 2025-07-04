@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require File.expand_path("parser", __dir__)
+require File.expand_path("json_parser", __dir__)
 require File.expand_path("utils", __dir__)
 
 module Elmas
@@ -22,7 +22,7 @@ module Elmas
     end
 
     def parsed
-      Parser.new(body)
+      JsonParser.new(body)
     end
 
     def result

@@ -4,6 +4,7 @@ require File.expand_path("utils", __dir__)
 require File.expand_path("exception", __dir__)
 require File.expand_path("uri", __dir__)
 require File.expand_path("sanitizer", __dir__)
+require File.expand_path("hash_parser", __dir__)
 
 module Elmas
   module Resource
@@ -15,6 +16,12 @@ module Elmas
 
     def initialize(attributes = {})
       @attributes = Utils.normalize_hash(attributes)
+      # handle expanded nested objects
+      attributes.select { |k,v| v.is_a?(Hash) && v.keys.include?("results") }.each do |k,v|
+        parsed_response = HashParser.new({ d: v })
+        @attributes[Utils.normalize_hash_key(k)] = ResultSet.new(parsed_response)
+      end
+
       @filters = []
       @query = []
     end
@@ -26,7 +33,8 @@ module Elmas
     def find_all(options = {})
       @order_by = options[:order_by]
       @select = options[:select]
-      response = get(uri(%i[order select]))
+      @expand = options[:expand]
+      response = get(uri(%i[order select expand]))
       response&.results
     end
 
@@ -35,7 +43,8 @@ module Elmas
       @filters = options[:filters]
       @order_by = options[:order_by]
       @select = options[:select]
-      response = get(uri(%i[order select filters]))
+      @expand = options[:expand]
+      response = get(uri(%i[order select expand filters]))
       response&.results
     end
 

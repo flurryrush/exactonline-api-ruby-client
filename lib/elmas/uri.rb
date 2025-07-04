@@ -83,6 +83,10 @@ module Elmas
       def apply_select
         @query << ["$select", @select.map { |s| Utils.camelize(s) }.join(",")] if @select
       end
+
+      def apply_expand
+        @query << ["$expand", @expand.map { |s| Utils.camelize(s) }.join(",")] if @expand
+      end
     end
   end
 end

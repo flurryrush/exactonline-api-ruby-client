@@ -13,7 +13,7 @@ describe Elmas::HRMDivision do
   end
 
   it "returns value for getters" do
-    hrm_division = Elmas::HRMDivision.new({ "Class01" => "345" })
+    hrm_division = Elmas::HRMDivision.new({ "Class_01" => "345" })
     expect(hrm_division.class_01).to eq "345"
   end
 
@@ -38,36 +38,36 @@ describe Elmas::HRMDivision do
     end
 
     it "should apply given filters for find_by" do
-      expect(Elmas).to receive(:get).with("hrm/Divisions?$filter=Class01 eq '1223'&$filter=ID eq guid'12abcdef-1234-1234-1234-123456abcdef'")
+      expect(Elmas).to receive(:get).with("hrm/Divisions?$filter=Class_01 eq '1223'&$filter=ID eq guid'12abcdef-1234-1234-1234-123456abcdef'")
       resource.find_by(filters: [:class_01, :id])
     end
   end
 
   context "Applying order" do
     it "should apply the order_by and filters" do
-    expect(Elmas).to receive(:get).with("hrm/Divisions?$orderby=Class01&$filter=Class01 eq '1223'&$filter=ID eq guid'12abcdef-1234-1234-1234-123456abcdef'")
+    expect(Elmas).to receive(:get).with("hrm/Divisions?$orderby=Class_01&$filter=Class_01 eq '1223'&$filter=ID eq guid'12abcdef-1234-1234-1234-123456abcdef'")
       resource.find_by(filters: [:class_01, :id], order_by: :class_01)
     end
 
     it "should only apply the order_by" do
-      expect(Elmas).to receive(:get).with("hrm/Divisions?$orderby=Class01")
+      expect(Elmas).to receive(:get).with("hrm/Divisions?$orderby=Class_01")
       resource.find_all(order_by: :class_01)
     end
   end
 
   context "Applying select" do
     it "should apply one select" do
-    expect(Elmas).to receive(:get).with("hrm/Divisions?$select=Class01")
+    expect(Elmas).to receive(:get).with("hrm/Divisions?$select=Class_01")
       resource.find_all(select: [:class_01])
     end
 
     it "should apply one select with find_by" do
-    expect(Elmas).to receive(:get).with("hrm/Divisions?$select=Class01")
+    expect(Elmas).to receive(:get).with("hrm/Divisions?$select=Class_01")
       resource.find_by(select: [:class_01])
     end
 
     it "should apply one select" do
-    expect(Elmas).to receive(:get).with("hrm/Divisions?$select=Class01,ID")
+    expect(Elmas).to receive(:get).with("hrm/Divisions?$select=Class_01,ID")
       resource.find_all(select: [:class_01, :id])
     end
   end
