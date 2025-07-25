@@ -65,6 +65,8 @@ module Elmas
       ob_number: "OBNumber",
       oin_number: "OINNumber",
       rsin: "RSIN",
+      vat_doc_type: "VatDocType",
+      vat_margin: "VatMargin"
     }
 
     def self.demodulize(class_name_in_module)
