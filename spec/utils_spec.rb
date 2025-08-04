@@ -35,6 +35,12 @@ describe Elmas::Utils do
     expect(Elmas::Utils.camelize("bsn")).to eq "BSN"
     expect(Elmas::Utils.camelize("quotation_id")).to eq "QuotationID"
     expect(Elmas::Utils.camelize("class_01")).to eq "Class_01"
+    expect(Elmas::Utils.camelize("amount_fc")).to eq "AmountFC"
+    expect(Elmas::Utils.camelize("amount_dc")).to eq "AmountDC"
+    expect(Elmas::Utils.camelize("vat_amount_fc")).to eq "VATAmountFC"
+    expect(Elmas::Utils.camelize("vat_gl_account_type")).to eq "VATGLAccountType"
+    expect(Elmas::Utils.camelize("amount_fc_excl_vat")).to eq "AmountFCExclVAT"
+    expect(Elmas::Utils.camelize("amount_vatfc")).to eq "AmountVATFC"
   end
 
   let(:original_hash) do
