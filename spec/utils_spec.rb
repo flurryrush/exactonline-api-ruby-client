@@ -27,6 +27,7 @@ describe Elmas::Utils do
 
   it "camelizes special cases" do
     expect(Elmas::Utils.camelize("vat_number")).to eq "VATNumber"
+    expect(Elmas::Utils.camelize("vat_code")).to eq "VATCode"
     expect(Elmas::Utils.camelize("is_hr_division")).to eq "IsHRDivision"
     expect(Elmas::Utils.camelize("ob_number")).to eq "OBNumber"
     expect(Elmas::Utils.camelize("address_line1")).to eq "AddressLine1"

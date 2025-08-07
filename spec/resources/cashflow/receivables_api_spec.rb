@@ -13,7 +13,7 @@ describe Elmas::Receivable do
   end
 
   it "returns value for getters" do
-    receivable = Elmas::Receivable.new({ "AmountDiscountDc" => "345" })
+    receivable = Elmas::Receivable.new({ "AmountDiscountDC" => "345" })
     expect(receivable.amount_discount_dc).to eq "345"
   end
 
@@ -38,36 +38,36 @@ describe Elmas::Receivable do
     end
 
     it "should apply given filters for find_by" do
-      expect(Elmas).to receive(:get).with("cashflow/Receivables?$filter=AmountDiscountDc eq '1223'&$filter=ID eq guid'12abcdef-1234-1234-1234-123456abcdef'")
+      expect(Elmas).to receive(:get).with("cashflow/Receivables?$filter=AmountDiscountDC eq '1223'&$filter=ID eq guid'12abcdef-1234-1234-1234-123456abcdef'")
       resource.find_by(filters: [:amount_discount_dc, :id])
     end
   end
 
   context "Applying order" do
     it "should apply the order_by and filters" do
-    expect(Elmas).to receive(:get).with("cashflow/Receivables?$orderby=AmountDiscountDc&$filter=AmountDiscountDc eq '1223'&$filter=ID eq guid'12abcdef-1234-1234-1234-123456abcdef'")
+    expect(Elmas).to receive(:get).with("cashflow/Receivables?$orderby=AmountDiscountDC&$filter=AmountDiscountDC eq '1223'&$filter=ID eq guid'12abcdef-1234-1234-1234-123456abcdef'")
       resource.find_by(filters: [:amount_discount_dc, :id], order_by: :amount_discount_dc)
     end
 
     it "should only apply the order_by" do
-      expect(Elmas).to receive(:get).with("cashflow/Receivables?$orderby=AmountDiscountDc")
+      expect(Elmas).to receive(:get).with("cashflow/Receivables?$orderby=AmountDiscountDC")
       resource.find_all(order_by: :amount_discount_dc)
     end
   end
 
   context "Applying select" do
     it "should apply one select" do
-    expect(Elmas).to receive(:get).with("cashflow/Receivables?$select=AmountDiscountDc")
+    expect(Elmas).to receive(:get).with("cashflow/Receivables?$select=AmountDiscountDC")
       resource.find_all(select: [:amount_discount_dc])
     end
 
     it "should apply one select with find_by" do
-    expect(Elmas).to receive(:get).with("cashflow/Receivables?$select=AmountDiscountDc")
+    expect(Elmas).to receive(:get).with("cashflow/Receivables?$select=AmountDiscountDC")
       resource.find_by(select: [:amount_discount_dc])
     end
 
     it "should apply one select" do
-    expect(Elmas).to receive(:get).with("cashflow/Receivables?$select=AmountDiscountDc,ID")
+    expect(Elmas).to receive(:get).with("cashflow/Receivables?$select=AmountDiscountDC,ID")
       resource.find_all(select: [:amount_discount_dc, :id])
     end
   end

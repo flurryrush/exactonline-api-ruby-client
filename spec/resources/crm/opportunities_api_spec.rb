@@ -13,7 +13,7 @@ describe Elmas::Opportunity do
   end
 
   it "returns value for getters" do
-    opportunity = Elmas::Opportunity.new({ "AmountDc" => "345" })
+    opportunity = Elmas::Opportunity.new({ "AmountDC" => "345" })
     expect(opportunity.amount_dc).to eq "345"
   end
 
@@ -38,36 +38,36 @@ describe Elmas::Opportunity do
     end
 
     it "should apply given filters for find_by" do
-      expect(Elmas).to receive(:get).with("crm/Opportunities?$filter=AmountDc eq '1223'&$filter=ID eq guid'12abcdef-1234-1234-1234-123456abcdef'")
+      expect(Elmas).to receive(:get).with("crm/Opportunities?$filter=AmountDC eq '1223'&$filter=ID eq guid'12abcdef-1234-1234-1234-123456abcdef'")
       resource.find_by(filters: [:amount_dc, :id])
     end
   end
 
   context "Applying order" do
     it "should apply the order_by and filters" do
-    expect(Elmas).to receive(:get).with("crm/Opportunities?$orderby=AmountDc&$filter=AmountDc eq '1223'&$filter=ID eq guid'12abcdef-1234-1234-1234-123456abcdef'")
+    expect(Elmas).to receive(:get).with("crm/Opportunities?$orderby=AmountDC&$filter=AmountDC eq '1223'&$filter=ID eq guid'12abcdef-1234-1234-1234-123456abcdef'")
       resource.find_by(filters: [:amount_dc, :id], order_by: :amount_dc)
     end
 
     it "should only apply the order_by" do
-      expect(Elmas).to receive(:get).with("crm/Opportunities?$orderby=AmountDc")
+      expect(Elmas).to receive(:get).with("crm/Opportunities?$orderby=AmountDC")
       resource.find_all(order_by: :amount_dc)
     end
   end
 
   context "Applying select" do
     it "should apply one select" do
-    expect(Elmas).to receive(:get).with("crm/Opportunities?$select=AmountDc")
+    expect(Elmas).to receive(:get).with("crm/Opportunities?$select=AmountDC")
       resource.find_all(select: [:amount_dc])
     end
 
     it "should apply one select with find_by" do
-    expect(Elmas).to receive(:get).with("crm/Opportunities?$select=AmountDc")
+    expect(Elmas).to receive(:get).with("crm/Opportunities?$select=AmountDC")
       resource.find_by(select: [:amount_dc])
     end
 
     it "should apply one select" do
-    expect(Elmas).to receive(:get).with("crm/Opportunities?$select=AmountDc,ID")
+    expect(Elmas).to receive(:get).with("crm/Opportunities?$select=AmountDC,ID")
       resource.find_all(select: [:amount_dc, :id])
     end
   end
