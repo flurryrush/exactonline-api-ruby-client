@@ -42,6 +42,7 @@ describe Elmas::Utils do
     expect(Elmas::Utils.camelize("vat_gl_account_type")).to eq "VATGLAccountType"
     expect(Elmas::Utils.camelize("amount_fc_excl_vat")).to eq "AmountFCExclVAT"
     expect(Elmas::Utils.camelize("amount_vatfc")).to eq "AmountVATFC"
+    expect(Elmas::Utils.camelize("callback_url")).to eq "CallbackURL"
   end
 
   let(:original_hash) do

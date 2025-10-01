@@ -30,6 +30,7 @@ module Elmas
       bic_code: "BICCode",
       brin: "BRIN",
       bsn: "BSN",
+      callback_url: "CallbackURL",
       class_01: "Class_01",
       class_02: "Class_02",
       class_03: "Class_03",
